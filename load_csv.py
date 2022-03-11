@@ -17,7 +17,7 @@ def shops():
                                                   longitude=float(row['longitude']))
         obj.id = int(row['shop_id'])
         obj.save()
-        print(created)
+        # print(created)
 
 
 def category():
@@ -29,7 +29,7 @@ def category():
                                                           background_color=row['background_color'])
             obj.id = int(row['id'])
             obj.save()
-            print(created)
+            # print(created)
         except:
             pass
 
@@ -42,7 +42,7 @@ def user():
             obj, created = User.objects.get_or_create(user_id=int(row['id']))
             obj.id = int(row['id'])
             obj.save()
-            print(created)
+            # print(created)
         except:
             print(row)
             # quit()
@@ -56,7 +56,7 @@ def product():
             obj, created = Product.objects.get_or_create(shop_id=Shop.objects.get(pk=int(row['shop_id'])),
                                                          category_id=Category.objects.get(pk=int(row['category_id'])),
                                                          title_fa=row['title_fa'])
-            print(created)
+            # print(created)
         except:
             print(row)
         # quit()
@@ -76,9 +76,12 @@ def order():
         #     print(row)
 
 
-# print(Shop.objects.get(""))
+print(len(Product.objects.all()))
 # shops()
+# print('****************************** 1 ************************')
 # category()
+# print('****************************** 2 ************************')
 # user()
+# print('****************************** 3  ************************')
 # product()
-order()
+# order()
