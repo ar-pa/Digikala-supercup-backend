@@ -6,6 +6,8 @@ stages:
 
 variables:
   IO_IMAGE_NAME: $CI_COMMIT_BRANCH
+  IO_IMAGE: ""
+  IO_TAG: ""
 
 build-job:
   tags:
