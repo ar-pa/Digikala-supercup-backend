@@ -6,8 +6,6 @@ stages:
 
 variables:
   IO_IMAGE_NAME: $CI_COMMIT_BRANCH
-  IO_IMAGE: ""
-  IO_TAG: ""
 
 build-job:
   tags:
@@ -16,6 +14,7 @@ build-job:
   before_script:
     - IO_IMAGE=$CI_REGISTRY_IMAGE/$IO_IMAGE_NAME
     - IO_TAG=$(sudo docker images | awk -v max=0 -v image=$IO_IMAGE '($1 == image) {if ($2 > max) {max=$2} } END {printf "%1.1f", max + 0.1}')
+    - echo $IO_TAG >> /tmp/io_tag.txt
   script:
     - sudo docker login $CI_REGISTRY -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD
     - sudo docker build -t $IO_IMAGE:$IO_TAG .
@@ -53,6 +52,9 @@ deploy-job:
   stage: deploy
   needs:
     - job: analysis
+  before_script:
+    - IO_IMAGE=$CI_REGISTRY_IMAGE/$IO_IMAGE_NAME
+    - IO_TAG=$(cat /tmp/io_tag.txt)
   script:
     - sudo kubectl set image deployment.v1.apps/backend backend=$IO_IMAGE:$IO_TAG
   only:
