@@ -49,34 +49,36 @@ def user():
 
 
 def product():
-    # Product.objects.all().delete()
+    Product.objects.all().delete()
     csv_dict = csv.DictReader(open('products.csv'))
     for row in csv_dict:
-        # try:
-        obj, created = Product.objects.get_or_create(shop_id=int(row['shop_id']),
-                                                     category_id=int(row['category_id']),
-                                                     title_fa=row['title_fa'])
-        print(created)
-
-    # except:
-    #     print(row)
-    #     quit()
+        try:
+            obj, created = Product.objects.get_or_create(shop_id=Shop.objects.get(pk=int(row['shop_id'])),
+                                                         category_id=Category.objects.get(pk=int(row['category_id'])),
+                                                         title_fa=row['title_fa'])
+            print(created)
+        except:
+            print(row)
+        # quit()
 
 
 def order():
     Order.objects.all().delete()
     csv_dict = csv.DictReader(open('orders.csv'))
     for row in csv_dict:
-        obj, created = Order.objects.get_or_create(shop_id=int(row['shop_id']),
-                                                   user_id=int(row['user_id']),
-                                                   shop_product_id=int(row['shop_product_id']),
-                                                   rate=float(row['rate']))
-        print(created)
+        # try:
+            Order.objects.get_or_create(shop_id=Shop.objects.get(pk=int(row['shop_id'])),
+                                        user_id=User.objects.get(pk=int(row['user_id'])),
+                                        shop_product_id=Product.objects.get(pk=int(row['shop_product_id'])),
+                                        rate=float(row['rate']))
+            # print(created)
+        # except:
+        #     print(row)
 
 
 # print(Shop.objects.get(""))
-shops()
+# shops()
 # category()
 # user()
 # product()
-# order()
+order()
