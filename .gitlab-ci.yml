@@ -52,7 +52,7 @@ deploy-job:
   needs:
     - job: analysis
   script:
-    - /bin/true
+    - sudo kubectl set image deployment/backend $IO_IMAGE:$IO_TAG
   only:
     refs:
       - master
