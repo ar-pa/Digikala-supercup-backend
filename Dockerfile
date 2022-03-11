@@ -8,8 +8,8 @@ ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
 
 # install dependencies
-COPY ./need.txt /usr/src/app
-RUN pip install -r need.txt
+COPY ./requirement.txt /usr/src/app
+RUN pip install -r requirement.txt
 
 # copy project
 COPY . /usr/src/app
