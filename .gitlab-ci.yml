@@ -1,0 +1,60 @@
+stages:
+  - build
+  - test
+  - analyze
+  - deploy
+
+variables:
+  IO_IMAGE_NAME: $CI_COMMIT_BRANCH
+  IO_IMAGE: ""
+  IO_TAG: ""
+
+build-job:
+  tags:
+    - build
+  stage: build
+  before_script:
+    - IO_IMAGE=$CI_REGISTRY_IMAGE/$IO_IMAGE_NAME
+    - IO_TAG=$(sudo docker images | awk -v max=0 -v image=$IO_IMAGE '($1 == image) {if ($2 > max) {max=$2} } END {printf "%1.1f", max + 0.1}')
+  script:
+    - sudo docker login $CI_REGISTRY -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD
+    - sudo docker build -t $IO_IMAGE:$IO_TAG .
+    - sudo docker push $IO_IMAGE:$IO_TAG
+    - sudo docker image rm $IO_IMAGE:$(echo "$IO_TAG 0.1" | awk '{printf "%1.1f", $1 - $2}') || true
+  after_script:
+    - sudo docker image prune -f
+
+test-job:
+  tags:
+    - test
+  stage: test
+  needs:
+    - job: build-job
+  before_script:
+    - /bin/true
+  script:
+    - /bin/true
+
+analysis:
+  tags:
+    - test
+  stage: analyze
+  needs:
+    - job: test-job
+  script:
+    - /bin/true
+  only:
+    refs:
+      - master
+
+deploy-job:
+  tags:
+    - deploy
+  stage: deploy
+  needs:
+    - job: analysis
+  script:
+    - sudo kubectl set image deployment.v1.apps/backend backend=$IO_IMAGE:$IO_TAG
+  only:
+    refs:
+      - master
