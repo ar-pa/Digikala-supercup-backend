@@ -34,6 +34,9 @@ def products(request, user_id, lat, long):
     long = float(long)
     ans = []
     for product in Product.objects.all():
-        if is_shop_available(product.shop_id, lat, long):
-            ans += [product]
+        if product.title_fa.startswith('پ'):
+            if is_shop_available(product.shop_id, lat, long):
+                ans += [product]
+                if len(ans) > 10:
+                    break
     return JsonResponse({'products': json.loads(serializers.serialize('json', ans))})
