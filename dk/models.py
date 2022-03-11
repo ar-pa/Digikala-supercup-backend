@@ -1,4 +1,6 @@
 from django.db import models
+
+
 # from django.contrib.gis.db import models
 
 
@@ -25,7 +27,8 @@ class Shop(models.Model):
     # rate_tags, preparation_time, cart_close_limit,
     service_radius = models.IntegerField()
     # , service_radius_critical,
-    # location = models.PointField()
+    latitude = models.FloatField(default=0)
+    longitude = models.FloatField(default=0)
 
 
 class Product(models.Model):

@@ -12,8 +12,9 @@ def shops():
                                                   is_open=bool(row['is_open']),
                                                   rate=float(row['rate']),
                                                   rate_count=int(row['rate_count']),
-                                                  service_radius=int(row['service_radius'])
-                                                  )
+                                                  service_radius=int(row['service_radius']),
+                                                  latitude=float(row['latitude']),
+                                                  longitude=float(row['longitude']))
         obj.id = int(row['shop_id'])
         obj.save()
         print(created)
@@ -48,13 +49,18 @@ def user():
 
 
 def product():
-    Product.objects.all().delete()
+    # Product.objects.all().delete()
     csv_dict = csv.DictReader(open('products.csv'))
     for row in csv_dict:
+        # try:
         obj, created = Product.objects.get_or_create(shop_id=int(row['shop_id']),
                                                      category_id=int(row['category_id']),
                                                      title_fa=row['title_fa'])
         print(created)
+
+    # except:
+    #     print(row)
+    #     quit()
 
 
 def order():
@@ -68,8 +74,9 @@ def order():
         print(created)
 
 
-# shops()
+# print(Shop.objects.get(""))
+shops()
 # category()
-user()
-product()
-order()
+# user()
+# product()
+# order()
