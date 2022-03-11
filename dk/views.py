@@ -1,14 +1,17 @@
 import json
-import geopy.distance
+import random
 
+import geopy.distance
 from django.core import serializers
 from django.http import JsonResponse
 
-from dk.models import Shop, Product
+from dk.models import Shop, Product, User
 
 
 def init(request):
-    return JsonResponse({'user_id': 17})
+    items = list(User.objects.all())
+    random_item = random.choice(items)
+    return JsonResponse({'user_id': random_item.id})
 
 
 def shops(request, user_id, lat, long):
