@@ -4,7 +4,6 @@ Django
 djangorestframework
 numpy
 pandas
-pkg-resources
 python-dateutil
 pytz
 sqlparse
